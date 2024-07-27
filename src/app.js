@@ -3,7 +3,6 @@ const path = require('path');
 const rateLimit = require('express-rate-limit');
 const swaggerJsdoc = require('swagger-jsdoc');
 const newsletterRoutes = require('./routes/newsletter');
-const swaggerUiDist = require('swagger-ui-dist');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,8 +23,8 @@ const limiter = rateLimit({
 // Apply rate limiting to all requests
 app.use(limiter);
 
-// Serve static files for Swagger UI
-app.use('/swagger-ui', express.static(swaggerUiDist.getAbsoluteFSPath()));
+// Serve static files from public folder
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Swagger setup
 const options = {
@@ -54,7 +53,7 @@ app.get('/api-docs-json', (req, res) => {
 
 // Serve custom Swagger UI HTML
 app.get('/api-docs', (req, res) => {
-    res.sendFile(path.join(__dirname, 'swagger', 'index.html'));
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 // Root route

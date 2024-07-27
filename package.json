@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-swagger-ui": "copyfiles -u 2 node_modules/swagger-ui-dist/* public/swagger-ui"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "copyfiles": "^2.4.1",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "swagger-jsdoc": "^6.2.8",
