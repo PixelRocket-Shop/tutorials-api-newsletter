@@ -1,0 +1,93 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Newsletter API",
+      "version": "1.0.0",
+      "description": "API for newsletter sign up and management"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000",
+        "description": "Local server"
+      }
+    ],
+    "paths": {
+      "/newsletter": {
+        "post": {
+          "summary": "Sign up for the newsletter",
+          "description": "Add a new subscriber to the newsletter.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "example": "user@example.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successfully signed up."
+            },
+            "400": {
+              "description": "Email already subscribed."
+            }
+          }
+        }
+      },
+      "/newsletter/{email}": {
+        "delete": {
+          "summary": "Unsubscribe from the newsletter",
+          "description": "Remove a subscriber from the newsletter.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "email",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successfully unsubscribed."
+            },
+            "404": {
+              "description": "Email not found."
+            }
+          }
+        },
+        "get": {
+          "summary": "Check if email is subscribed",
+          "description": "Check if an email is already subscribed to the newsletter.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "email",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Email is subscribed."
+            },
+            "404": {
+              "description": "Email not subscribed."
+            }
+          }
+        }
+      }
+    }
+  }
+  
