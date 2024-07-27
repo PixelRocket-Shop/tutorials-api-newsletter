@@ -1,3 +1,6 @@
+# Ignore changes to subscribers.json
+src/data/subscribers.json
+
 # Logs
 logs
 *.log
