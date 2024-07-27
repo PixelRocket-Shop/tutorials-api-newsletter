@@ -30,6 +30,11 @@ app.use(limiter);
 // Serve static files from public folder
 app.use(express.static(path.join(__dirname, '../public')));
 
+// Determine the base URL dynamically
+const baseUrl = process.env.NODE_ENV === 'production'
+  ? 'https://tutorials-api-newsletter.vercel.app'
+  : `http://localhost:${port}`;
+
 // Swagger setup
 const options = {
     swaggerDefinition: {
@@ -41,7 +46,7 @@ const options = {
         },
         servers: [
             {
-                url: `http://localhost:${port}`,
+                url: baseUrl,
             },
         ],
     },
@@ -69,5 +74,5 @@ app.get('/', (req, res) => {
 app.use('/newsletter', newsletterRoutes);
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on ${baseUrl}`);
 });
