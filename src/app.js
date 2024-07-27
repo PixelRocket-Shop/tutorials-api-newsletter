@@ -24,6 +24,8 @@ const limiter = rateLimit({
 // Apply rate limiting to all requests
 app.use(limiter);
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Swagger setup
 const options = {
     swaggerDefinition: {
