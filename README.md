@@ -75,22 +75,5 @@ This project is a simple Newsletter API built with Express.js, featuring rate li
   - 404 Not Found: Email not subscribed.
 
 
-### Project Structure
-
-newsletter-api/
-├── node_modules/
-├── src/
-│   ├── routes/
-│   │   └── newsletter.js
-│   ├── swagger/
-│   │   └── swagger.json
-│   ├── data/
-│   │   └── subscribers.json
-│   └── app.js
-├── .gitignore
-├── package-lock.json
-├── package.json
-└── README.md
-
 ### License
 This project is licensed under the MIT License.
