@@ -1,9 +1,9 @@
+
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
-const fs = require('fs');
 const newsletterRoutes = require('./routes/newsletter');
 
 const app = express();
@@ -42,6 +42,11 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+// Root route
+app.get('/', (req, res) => {
+    res.redirect('/api-docs');
+});
 
 // Routes
 app.use('/newsletter', newsletterRoutes);
