@@ -20,6 +20,7 @@ This project is a simple Newsletter API built with Express.js, featuring rate li
 
 1. Clone the repository:
    git clone https://github.com/PixelRocket-Shop/tutorials-api-newsletter.git
+   \
    cd newsletter-api
    
 
