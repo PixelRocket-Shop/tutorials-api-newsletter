@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const swaggerJsdoc = require('swagger-jsdoc');
 const newsletterRoutes = require('./routes/newsletter');
@@ -9,6 +10,9 @@ const port = process.env.PORT || 3000;
 
 // Trust the 'X-Forwarded-For' header from Vercel
 app.set('trust proxy', 1);
+
+// Enable CORS
+app.use(cors());
 
 // Middleware
 app.use(express.json());
