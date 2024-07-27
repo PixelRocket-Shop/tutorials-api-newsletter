@@ -1,8 +1,9 @@
 const express = require('express');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
 const path = require('path');
+const fs = require('fs');
 const rateLimit = require('express-rate-limit');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-dist');
 const newsletterRoutes = require('./routes/newsletter');
 
 const app = express();
@@ -24,7 +25,8 @@ const limiter = rateLimit({
 // Apply rate limiting to all requests
 app.use(limiter);
 
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files
+app.use('/swagger-ui', express.static(swaggerUi.getAbsoluteFSPath()));
 
 // Swagger setup
 const options = {
@@ -41,15 +43,22 @@ const options = {
             },
         ],
     },
-    apis: [path.join(__dirname, 'routes', '*.js')],  // Ensure this path is correct
+    apis: [path.join(__dirname, 'routes', '*.js')],
 };
 
 const specs = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.get('/api-docs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'swagger', 'index.html'));
+});
 
 // Root route
 app.get('/', (req, res) => {
     res.redirect('/api-docs');
+});
+
+// swagger docs
+app.get('/api-docs-json', (req, res) => {
+    res.json(specs);
 });
 
 // Routes
