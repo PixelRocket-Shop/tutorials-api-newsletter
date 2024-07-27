@@ -8,6 +8,9 @@ const newsletterRoutes = require('./routes/newsletter');
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Trust the 'X-Forwarded-For' header from Vercel
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(express.json());
 
