@@ -19,26 +19,23 @@ This project is a simple Newsletter API built with Express.js, featuring rate li
 ### Installation
 
 1. Clone the repository:
-   bash
-   git clone https://github.com/your-username/newsletter-api.git
+   git clone https://github.com/PixelRocket-Shop/tutorials-api-newsletter.git
    cd newsletter-api
    
 
 2. Install dependencies:
-   bash
    npm install
    
 
 ### Running the API Locally
 
 1. Start the server:
-   bash
    node src/app.js
    
 
-2. The API will be running at \`http://localhost:3000\`.
+2. The API will be running at http://localhost:3000.
 
-3. Access the Swagger documentation at \`http://localhost:3000/api-docs\`.
+3. Access the Swagger documentation at http://localhost:3000/api-docs.
 
 ### API Endpoints
 
@@ -79,7 +76,6 @@ This project is a simple Newsletter API built with Express.js, featuring rate li
 
 ### Project Structure
 
-
 newsletter-api/
 ├── node_modules/
 ├── src/
@@ -96,5 +92,4 @@ newsletter-api/
 └── README.md
 
 ### License
-
 This project is licensed under the MIT License.
