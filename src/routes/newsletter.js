@@ -1,20 +1,37 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const { MongoClient } = require('mongodb');
 const router = express.Router();
 
-const subscribersFilePath = path.join(__dirname, '../data/subscribers.json');
+// MongoDB connection URI
+const uri = process.env.MONGODB_URI;
 
-// Utility function to read subscribers from file
-const readSubscribers = () => {
-    const data = fs.readFileSync(subscribersFilePath, 'utf-8');
-    return JSON.parse(data);
-};
+let client, db, subscribersCollection;
 
-// Utility function to write subscribers to file
-const writeSubscribers = (subscribers) => {
-    fs.writeFileSync(subscribersFilePath, JSON.stringify(subscribers, null, 2), 'utf-8');
-};
+async function connectDB() {
+    if (!client || !client.isConnected()) {
+        client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        db = client.db('newsletter'); // Database name
+        subscribersCollection = db.collection('subscribers');
+    }
+}
+
+// Utility function to read subscribers from MongoDB
+async function readSubscribers() {
+    await connectDB();
+    return await subscribersCollection.find().toArray();
+}
+
+// Utility function to write subscribers to MongoDB
+async function writeSubscribers(email) {
+    await connectDB();
+    return await subscribersCollection.insertOne({ email });
+}
+
+// Utility function to delete a subscriber from MongoDB
+async function deleteSubscriber(email) {
+    await connectDB();
+    return await subscribersCollection.deleteOne({ email });
+}
 
 /**
  * @swagger
@@ -38,14 +55,13 @@ const writeSubscribers = (subscribers) => {
  *       400:
  *         description: Email already subscribed.
  */
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { email } = req.body;
-    const subscribers = readSubscribers();
-    if (subscribers.includes(email)) {
+    const subscribers = await readSubscribers();
+    if (subscribers.find(subscriber => subscriber.email === email)) {
         return res.status(400).send('Email already subscribed.');
     }
-    subscribers.push(email);
-    writeSubscribers(subscribers);
+    await writeSubscribers(email);
     res.status(200).send('Successfully signed up.');
 });
 
@@ -67,14 +83,12 @@ router.post('/', (req, res) => {
  *       404:
  *         description: Email not found.
  */
-router.delete('/:email', (req, res) => {
+router.delete('/:email', async (req, res) => {
     const { email } = req.params;
-    let subscribers = readSubscribers();
-    if (!subscribers.includes(email)) {
+    const result = await deleteSubscriber(email);
+    if (result.deletedCount === 0) {
         return res.status(404).send('Email not found.');
     }
-    subscribers = subscribers.filter(subscriber => subscriber !== email);
-    writeSubscribers(subscribers);
     res.status(200).send('Successfully unsubscribed.');
 });
 
@@ -96,10 +110,10 @@ router.delete('/:email', (req, res) => {
  *       404:
  *         description: Email not subscribed.
  */
-router.get('/:email', (req, res) => {
+router.get('/:email', async (req, res) => {
     const { email } = req.params;
-    const subscribers = readSubscribers();
-    if (subscribers.includes(email)) {
+    const subscribers = await readSubscribers();
+    if (subscribers.find(subscriber => subscriber.email === email)) {
         return res.status(200).send('Email is subscribed.');
     }
     res.status(404).send('Email not subscribed.');
