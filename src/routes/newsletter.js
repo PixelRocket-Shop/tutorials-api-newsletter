@@ -8,8 +8,9 @@ const uri = process.env.MONGODB_URI;
 let client, db, subscribersCollection;
 
 async function connectDB() {
-    if (!client || !client.isConnected()) {
-        client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    if (!client || !client.topology || !client.topology.isConnected()) {
+        client = new MongoClient(uri);
+        await client.connect();
         db = client.db('newsletter'); // Database name
         subscribersCollection = db.collection('subscribers');
     }
